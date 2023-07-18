@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-t2pw5s#f8w2b#od5jn5sjcpidj(5^7cuok08+3zv8$0l!--qq(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -81,6 +82,21 @@ DATABASES = {
 }
 
 
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'df5tq3brqc0kve',
+        'USER': 'zjkbmjuikudluz',
+        'PASSWORD': '64ecaa42d2495a356ab97ca9930d9b06ba996120fb23443ea1a0413b98962ac6',
+        'HOST': 'ec2-34-226-11-94.compute-1.amazonaws.com',
+        'PORT': '5432'
+    }
+}
+
+"""
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -121,3 +137,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+django_heroku.settings(locals())
