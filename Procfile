@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath starterkit scaffold.wsgi --log-file -
+web: gunicorn --pythonpath scaffold scaffold.wsgi --log-file -
