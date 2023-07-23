@@ -63,7 +63,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'django_cleanup',
-
+    'crispy_bootstrap4',
     'foundation',
     'users',
     'friend',
