@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <h1>Charts</h1>
+  {% if Charts %}
+    <ul>
+      {% for chart in Charts %}
+        <li><a href="{% url 'metaversemusic:charts-detail' chart.pk %}">{{ chart.post.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No charts available.</p>
+  {% endif %}
+{% endblock %}

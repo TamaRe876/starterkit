@@ -1,0 +1,18 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <h1>{{ playlist.name }}</h1>
+  <p>Created by: {{ playlist.user }}</p>
+  <h3>Songs:</h3>
+  <ul>
+    {% for song in playlist.song_ids.all %}
+      <li>{{ song.title }} by {{ song.song.artist }}</li>
+    {% endfor %}
+  </ul>
+  <h3>Tags:</h3>
+  <ul>
+    {% for tag in playlist.tags.all %}
+      <li>{{ tag.name }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

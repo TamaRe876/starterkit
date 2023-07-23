@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <h1>Playlists</h1>
+  {% if playlists %}
+    <ul>
+      {% for playlist in playlists %}
+        <li><a href="{% url 'metaversemusic:playlist-detail' playlist.pk %}">{{ playlist.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No playlists available.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+  <h1>{{ chart.post.title }}</h1>
+  <p>Likes: {{ chart.likes_count }}</p>
+  <p>Comments: {{ chart.comments_count }}</p>
+  <p>Saves: {{ chart.saves_count }}</p>
+{% endblock %}
