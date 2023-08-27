@@ -1,6 +1,10 @@
 {% extends "blog/base.html" %}
 
+{% load static %}
 {% block title %}{{ post.title }}{% endblock %}
+
+
+
 
 {% block content %}
 <div class="col-md-10 m-auto">
@@ -17,6 +21,10 @@
             <p><small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small></p>
         </div>
     </div>
+    {% if post.cover_art %}
+    <img src="{{post.cover_art.url}}" style="max-width:300px; max-height: 400px;"/>
+
+    {% endif %}
     <hr>
     <h3 class="d-inline"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
     {% if post.author == user %}
@@ -24,15 +32,21 @@
             &nbsp;&nbsp;&nbsp;<a class="btn btnedit" href="{% url 'post-update' post.id %}"><i class="far fa-edit"></i></a>
             &nbsp;&nbsp;&nbsp;<a class="btn btndel" href="{% url 'post-delete' post.id %}"><i class="far fa-trash-alt"></i></a>
         </div>
+
+    {% endif %}
+     {% if post.video %}
+    <img src="{{post.video.url}}" style="aspect-ratio: 16 / 9;"/>
+
     {% endif %}
 
-    {% if post.song %}
-        <div class="music-player">
-            <audio controls>
-                <source src="{{ post.song.url }}" type="audio/mp3">
-                Your browser does not support the audio element.
-            </audio>
-        </div>
+    {% if post.link %}
+
+  <div id="waveform">
+    <div id="time">0:00</div>
+    <div id="duration">0:00</div>
+    <div id="hover"></div>
+  </div>
+
     {% endif %}
 
     <hr>
@@ -52,5 +66,7 @@
 <br><br>
 
 </div>
+
+
 
 {% endblock %}

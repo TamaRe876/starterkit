@@ -20,6 +20,7 @@ from django.urls import path, include
 from users import views as user_views
 from django.conf import settings
 from django.conf.urls.static import static
+from blog.views import search
 
 
 urlpatterns = [
@@ -49,6 +50,9 @@ urlpatterns = [
     path('vc/', include('videocall.urls')),
     path('friend/', include('friend.urls', namespace='friend')),
     path('metaversemusic/', include('metaversemusic.urls')),
+    path('search/', search, name='search'),
+
+
 ]
 
 if settings.DEBUG:

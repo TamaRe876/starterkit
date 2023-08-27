@@ -10,10 +10,15 @@
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">New Post</legend>
+
                 {{ form.media }}
                 {{ form.title|as_crispy_field }}
-                {{ form.song|as_crispy_field }}
                 {{ form.cover_art|as_crispy_field }}
+                <center style="color:red;"> <b>Upload either cover art or video not both at the same time</b></center>
+                 {{ form.video|as_crispy_field }}
+                {{ form.caption|as_crispy_field }}
+                {{ form.link|as_crispy_field }}
+
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-info" type="submit">Post</button>

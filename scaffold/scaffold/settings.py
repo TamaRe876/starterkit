@@ -38,7 +38,7 @@ SECRET_KEY = os.environ.get(
     default=secrets.token_urlsafe(nbytes=64),
 )
 
-# DEBUG = True
+DEBUG = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
@@ -61,12 +61,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-
+    'dal',
+    'dal_select2',
     'crispy_forms',
     'django_cleanup',
     'crispy_bootstrap4',
     'foundation',
+
     'users',
+    'rest_framework',
+
     'friend',
     'blog',
     'chat',
@@ -160,7 +164,15 @@ else:
             'PORT': '5432',
         }
     }
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
+"""
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -192,6 +204,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+STREAM_DEFAULT_VIDEO_PATH_URL_VAR = 'static/stream'
+STREAM_WATCH_LOG_ENABLED = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
@@ -199,14 +213,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
-"""
+
 STORAGES = {
     # ...
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
-"""
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

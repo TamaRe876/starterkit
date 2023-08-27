@@ -7,7 +7,7 @@
 <div class="col-md-8">
     
     {% if posts|length == 0 %}
-      <span class="text-muted">You must follow someone to view posts on your feeds</span>
+      <span class="text-muted">You must follow someone to view releases on your feeds</span>
       <br><br>
     {% endif %}
 
@@ -32,8 +32,17 @@
     </div>
     <hr>
     <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
+        {% if post.song %}
+
+  <div></div>
+    <div>
+  <audio id="audio-player" controls>
+    <source src="{{ post.song.url }}" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+        {% endif %}
     <hr>
-      <p class="article-content">{{ post.content|safe|linebreaks|truncatewords_html:"20" }}<a href="{% url 'post-detail' post.id %}">[Read full post]</a></p>
+      <p class="article-content">{{ post.content|safe|linebreaks|truncatewords_html:"20" }}<a href="{% url 'post-detail' post.id %}">Details</a></p>
     </article>
     {% endfor %}
 
@@ -65,10 +74,10 @@
 
 
 <!-- SIDEBAR -->
-<div class="col-md-4">
+<div class="row-md-4">
   <div class="content-section" style="border-top: 4px solid red;">
     
-    <h4>Recent Posts</h4>
+    <h4>Latest Releases</h4>
     <br>
       <ul class="list-group">
           {% if posts.0 %}
@@ -96,8 +105,10 @@
           <a class="btn btn-warning float-right" href="{% url 'profile-list-view' %}">All users</a>
           <br>
           <div class="collapse" id="collapseExample">
+
               {% if profile.following.all %}
                   {% for p in profile.following.all %}
+
                       <hr>
                       <a class="mr-2" href="{% url 'profile-detail-view' p.pk %}">{{ p }}</a>
                   {% endfor %}

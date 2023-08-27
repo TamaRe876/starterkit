@@ -1,0 +1,16 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<head>
+    <title>{{ song.name }}</title>
+</head>
+<body>
+    <h1>{{ song.name }}</h1>
+    <p>Artist: {{ song.artist }}</p>
+    <p>Album: {{ song.album }}</p>
+    <p>Genre: {{ song.genre }}</p>
+    <p>Duration: {{ song.get_duration_as_string }}</p>
+    <!-- Add other song details as needed -->
+</body>
+</html>
+{% endblock content %}

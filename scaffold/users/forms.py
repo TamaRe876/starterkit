@@ -3,13 +3,37 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from PIL import Image
+from django_countries.widgets import CountrySelectWidget
+from django_countries.fields import CountryField
+
 
 class UserRegisterForm(UserCreationForm):
+    USER_TYPE_CHOICES = (
+        ('artist', 'Artist'),
+        ('fan', 'Fan'),
+    )
+
     email = forms.EmailField()
+    user_type = forms.ChoiceField(choices=USER_TYPE_CHOICES, initial='fan', widget=forms.RadioSelect)
+    country = CountryField()
 
     class Meta:
         model = User
-        fields = ['first_name','last_name','username','email','password1','password2']
+        widgets = {"country": CountrySelectWidget()}
+        date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+
+
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+
+        user_profile = Profile.objects.create(user=user, country=self.cleaned_data['country'], user_type=self.cleaned_data['user_type'], date_of_birth=self.cleaned_data['date_of_birth'])
+        return user, user_profile
+
 
 
 class UserUpdateForm(forms.ModelForm):

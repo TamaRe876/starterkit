@@ -1,35 +1,128 @@
 {% extends "blog/base.html" %}
-
+{% load static %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
 
-<div class="col-md-8">
+<div class='allsides'>
+    <div class='sidebar'>
+        <div class="content-section" style="border-top: 4px solid red;">
+      <h4>New Vibes</h4>
+      <br>
+      <!-- <p class="text-muted">You can put any information here you'd like. -->
+          <ul class="list-group">
+              {% if posts.0 %}
+                <a href="{% url 'post-detail' posts.0.pk %}"><li class="list-item">{{ posts.0.title }}</li></a>
+              {% endif %}
+              {% if posts.1 %}
+                <a href="{% url 'post-detail' posts.1.pk %}"><li class="list-item">{{ posts.1.title }}</li></a>
+              {% endif %}
+              {% if posts.2 %}
+                <a href="{% url 'post-detail' posts.2.pk %}"><li class="list-item">{{ posts.2.title }}</li></a>
+              {% endif %}
+              {% if posts.3 %}
+                <a href="{% url 'post-detail' posts.3.pk %}"><li class="list-item">{{ posts.3.title }}</li></a>
+              {% endif %}
+              {% if posts.4 %}
+                <a href="{% url 'post-detail' posts.4.pk %}"><li class="list-item">{{ posts.4.title }}</li></a>
+              {% endif %}
+          </ul>
+          <br>
 
-    {% if posts%}
 
-    {% for post in posts %}
+  </div>
 
-    <article class="content-section" style="overflow: auto; ">
-      <div class="media">
-          <img class="rounded-circle article-img " src="{{post.author.profile.image.url}}" alt="image">
+  <!-- PEOPLE YOU CAN FOLLOW -->
+
+  <div class="content-section  " style="border-top: 4px solid blue;">
+    <h4>Vibes to follow</h4>
+    <br>
+        <ul class="list-group">
+          {% for user in random_users %}
+            <a href="{% url 'profile-detail-view' user.pk %}"><li class="list-group-item list-group-item-light">{{ user.username }}</li></a>
+          {% endfor %}
+
+        </ul>
+        <br>
+  </div>
+    </div>
+
+    <div class='posts'>
+{% for post in posts %}
+
+ <div class="container">
+        <center>
+            <h1><a class="article-title text-centered" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h1>
+            <div class="card">
+                 {% if post.cover_art %}
+    <img src="{{post.cover_art.url}}" class="card-img-top" />
+
+    {% endif %}
+
+                <div class="card-img-overlay card-inverse">
+                    <h4 class="text-stroke text-white pb-5">
+                        <p class="article-content">{{ post.content|safe|linebreaks|truncatewords_html:"20" }}</p>
+
+                    </h4>
+                    <div class="card-block pt-5">
+                        <a href="#" class="card-link text-white">Link
+                        </a>
+                    </div>
+                </div>
+
+                <p class="article-content">{{ post.author }}</p>
+
+                <a href="{% url 'post-detail' post.id %}">[Read full post]</a>
+            </div>
+        </center>
+    </div>
+
+<!--
+    <article class="grid text-center">
+        <div class="container">
+              {% if post.cover_art %}
+    <img src="{{post.cover_art.url}}" style="max-width:300px; max-height: 300px;"/>
+
+    {% endif %}
+            <div class="text-block">
+                 <div class="media">
+
           <div class="media-body">
+
               <p class="mb-0">
-                <a class="mr-2 h4" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a>
+                <a class="mr-2 h5 text-centered" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a>
               </p>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y-h:i A" }}</small>
+              <small class="text-muted text-centered" id="post-date">{{ post.date_posted|date:"F d, Y-h:i A" }}</small>
           </div>
       </div>
+        <img class="rounded-circle article-img media " src="{{post.author.profile.image.url}}" alt="image">
+
       <hr>
-      <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
+      <h4><a class="article-title text-centered" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
+
+            </div>
+        </div>
+
+        {% if post.video %}
+    <img src="{{post.video.url}}" style="aspect-ratio: 16 / 9;"/>
+
+    {% endif %}
+
+
+
+-->
+
+
+
       <hr>
-      <p class="article-content">{{ post.content|safe|linebreaks|truncatewords_html:"20" }}<a href="{% url 'post-detail' post.id %}">[Read full post]</a></p>
-    </article>
+
+
 
     {% endfor %}
-    {% else %}
-    <h2>No posts made yet, be the first!</h2>
-    {% endif %}
+
+
+
+
     {% if is_paginated %}
 
       {% if page_obj.has_previous %}
@@ -51,50 +144,15 @@
       {% endif %}
 
     {% endif %}
+</div>
 
 </div>
 
-<!-- SIDEBAR -->
-<div class="col-md-4">
-  <div class="content-section" style="border-top: 4px solid red;">
-      <h4>New Releases</h4>
-      <br>
-      <!-- <p class="text-muted">You can put any information here you'd like. -->
-          <ul class="list-group">
-              {% if posts.0 %}
-                <a href="{% url 'post-detail' posts.0.pk %}"><li class="list-group-item list-group-item-light">{{ posts.0.title }}</li></a>
-              {% endif %}
-              {% if posts.1 %}
-                <a href="{% url 'post-detail' posts.1.pk %}"><li class="list-group-item list-group-item-light">{{ posts.1.title }}</li></a>
-              {% endif %}
-              {% if posts.2 %}
-                <a href="{% url 'post-detail' posts.2.pk %}"><li class="list-group-item list-group-item-light">{{ posts.2.title }}</li></a>
-              {% endif %}
-              {% if posts.3 %}
-                <a href="{% url 'post-detail' posts.3.pk %}"><li class="list-group-item list-group-item-light">{{ posts.3.title }}</li></a>
-              {% endif %}
-              {% if posts.4 %}
-                <a href="{% url 'post-detail' posts.4.pk %}"><li class="list-group-item list-group-item-light">{{ posts.4.title }}</li></a>
-              {% endif %}
-          </ul>
-          <br>
-  </div>
 
-  <!-- PEOPLE YOU CAN FOLLOW -->
 
-  <div class="content-section " style="border-top: 4px solid blue;">
-    <h4>Who to follow</h4>
-    <br>
-        <ul class="list-group">
-          {% for user in random_users %}
-            <a href="{% url 'profile-detail-view' user.pk %}"><li class="list-group-item list-group-item-light">{{ user.username }}</li></a>
-          {% endfor %}
-  
-        </ul>
-        <br>
-  </div>
 
-</div>  
+
+
 
 {% endblock %}
 {% block script %}

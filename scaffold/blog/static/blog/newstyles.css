@@ -1,0 +1,78 @@
+.main-content {
+    display: initial;
+}
+
+.main-content .main-section {
+    width: 100%;
+}
+
+.allsides {
+    display: grid;
+    border: none;
+
+}
+
+.posts {
+    display: inline-flex;
+    column-gap: 10px;
+    grid-column-start: 2;
+    grid-column-end: span col-4-end;
+    justify-items: center;
+    align-items: center;
+}
+
+#post-date {
+    text-align:center;
+}
+
+.sidebar {
+    display:grid;
+    max-width: 400px;
+    min-width: 300px;
+    padding: 0;
+    margin: 0;
+    margin-top: 1.5rem;
+}
+
+ul .list-group {
+    display: none;
+}
+
+article .container .text-block {
+    position: absolute; /* Position the background text */
+  bottom: 0; /* At the bottom. Use top:0 to append it to the top */
+  background: rgb(0, 0, 0); /* Fallback color */
+  background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+  color: #f1f1f1; /* Grey text */
+  width: 100%; /* Full width */
+  padding: 20px; /* Some padding */
+}
+
+.container {
+            margin-top: 50px;
+            width: 100%;
+        }
+        .card {
+            width: 270px;
+            height: 250px;
+            padding: 5px;
+        }
+
+        h1 {
+            color: rgb(36, 168, 36);
+            text-align: center;
+        }
+        img {
+            height: 175px;
+        }
+
+.list-item{
+    list-style: none;
+    color: white;
+
+}
+
+.content-section {
+    background:black;
+    border-top: 1px black;
+}

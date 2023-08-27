@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-steel fixed-top">
     <div class="container">
-        <a class="navbar-brand mr-4 pr-3" href="/">VibeStream</a>
+        <a class="navbar-brand mr-4 pr-3" href="/">Vibstream</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -8,20 +8,22 @@
                     <a class="dropdown-toggle nav-link" href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         MetaVerseMusic
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
+                 <!--   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
+                        <a class="dropdown-item" href="{% url 'metaversemusic:nftsmarket' %}">NFT Marketplace</a>
+                        <a class="dropdown-item" href="{% url 'metaversemusic:createnft' %}">Mint NFT</a>
                       <a class="dropdown-item" href="{% url 'metaversemusic:charts-list' %}">Charts</a>
                         <a class="dropdown-item" href="{% url 'metaversemusic:playlist-list' %}">Playlists</a>
                         <a class="dropdown-item" href="{% url 'metaversemusic:playlist-create' %}">Create Playlist</a>
 
-                    </div>
+                    </div> -->
                 </div>
         <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
                 <!-- SEARCHBAR -->
                 <div id="searchbar" >
-                    <form method="GET" action="/search">
+                    <form method="GET" action="/search" class="border border-danger">
                         <input required name="query" id="search" type="text" placeholder="Search">
-                        <button class="search-btn" type="submit"><i class="fas fa-search"></i></button>
+                        <button class="search-btn" type="submit"><i class="fas fa-search "></i></button>
                     </form>
                 </div>
             </div>
@@ -36,18 +38,22 @@
                 <!-- <a class="nav-item nav-link" href="{% url 'vc-lobby' %}">Calls</a> -->
                 <div class="dropdown">
                     <a class="dropdown-toggle nav-link" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Music
+                        Vibes
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-                        <a class="dropdown-item" href="{% url 'post-create' %}"><i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Upload</a>
+                        <a class="dropdown-item" href="{% url 'post-create' %}"><i class="fas fa-plus-circle"></i>&nbsp;&nbsp;Add Vibe</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'posts-follow-view' %}">Feeds</a>
                         <a class="dropdown-item" href="{% url 'all-like' %}">Likes</a>
                         <a class="dropdown-item" href="{% url 'all-save' %}">Saves</a>
-                        <a class="dropdown-item" href="{% url 'blog-home' %}">All Music</a>
-                        <a class="dropdown-item" href="{% url 'user-posts' user %}">My Music</a>
+                        <a class="dropdown-item" href="{% url 'blog-home' %}">All Vibes</a>
+                        <a class="dropdown-item" href="{% url 'user-posts' user %}">My Vibes</a>
                     </div>
+
                 </div>
+
+
+
                 {% endif %}
 
                 {% if user.is_authenticated %}

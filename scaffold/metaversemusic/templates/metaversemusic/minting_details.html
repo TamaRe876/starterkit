@@ -1,0 +1,25 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+    <h1>Minting Details for "{{ nft.title }}"</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label for="minting_cost">Minting Cost:</label>
+        <input type="number" name="minting_cost" step="0.01" value="{{ nft.minting_cost }}">
+        <br>
+
+        <label for="royalty_share">Royalty Share:</label>
+        <input type="number" name="royalty_share" step="0.01" value="{{ nft.royalty_share }}">
+        <br>
+
+        <input type="submit" value="Save">
+    </form>
+
+    {% if success %}
+        <p>Details saved successfully!</p>
+    {% endif %}
+
+{% endblock content %}

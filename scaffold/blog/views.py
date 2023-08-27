@@ -15,6 +15,8 @@ from django.template.loader import render_to_string
 import random
 from blog.utils import is_ajax
 
+from notification.models import Notification
+
 
 def first(request):
     context = {
@@ -258,7 +260,7 @@ def PostDetailView(request, pk):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'blog/post_form.html'
-    fields = ['title', 'song', 'cover_art']
+    fields = ['title', 'cover_art', 'link', 'video', 'caption']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -267,7 +269,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'song__title', 'song__artist', 'cover_art']
+    fields = ['title', 'cover_art', 'link','video', 'caption']
 
     def form_valid(self, form):
         form.instance.author = self.request.user

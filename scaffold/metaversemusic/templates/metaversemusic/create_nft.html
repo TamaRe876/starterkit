@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h1>NFT Creation Form</h1>
+
+
+
+
+ <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Create NFT</button>
+    </form>
+
+
+<!-- In your template -->
+<button id="connect-wallet">Connect Wallet</button>
+<script>
+document.getElementById("connect-wallet").addEventListener("click", async () => {
+  if (window.ethereum) {
+    try {
+      await window.ethereum.enable();
+      alert("Wallet connected!");
+      // You can trigger form submission or other actions here
+    } catch (error) {
+      console.error("Wallet connection error:", error);
+    }
+  } else {
+    alert("Web3 wallet not found. Install MetaMask or another compatible wallet.");
+  }
+});
+</script>
+
+
+
+
+
+{% endblock content %}

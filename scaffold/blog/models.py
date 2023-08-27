@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-
 class Tag(models.Model):
     name = models.CharField(max_length=100)
 
@@ -13,12 +12,10 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=150)
-    artist = models.CharField(max_length=100, blank=True, null=True)
-    caption = models.TextField(max_length=500, blank=True, null=True)
     cover_art = models.ImageField(upload_to='covers/', blank=True, null=True)
-    song = models.FileField(blank=True, null=True)
-    audio_link = models.CharField(max_length=200, blank=True, null=True)
-    duration = models.CharField(max_length=20, blank=True, null=True)
+    video = models.FileField(upload_to='videos/', blank=True, null=True)
+    caption = models.TextField(max_length=500, blank=True, null=True)
+    link = models.URLField(default='https://www.vibstream.com')
     tags = models.ManyToManyField(Tag, blank=True)
     date_posted = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)

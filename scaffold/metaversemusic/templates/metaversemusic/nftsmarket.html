@@ -1,0 +1,22 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div class="nfts">
+     <h1>All NFTs</h1>
+
+    <ul>
+        {% for nft in nfts %}
+            <li>
+                <h2>{{ nft.title }}</h2>
+                <p>Description: {{ nft.description }}</p>
+                <p>Artist: {{ nft.artist_name }}</p>
+                <p>Duration: {{ nft.get_duration_as_string }}</p>
+                <p>Genres: {% for genre in nft.genre.all %}{{ genre.genre_choice }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                <!-- Add more fields as needed -->
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock content %}

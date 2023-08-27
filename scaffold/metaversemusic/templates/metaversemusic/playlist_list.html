@@ -6,6 +6,14 @@
     <ul>
       {% for playlist in playlists %}
         <li><a href="{% url 'metaversemusic:playlist-detail' playlist.pk %}">{{ playlist.name }}</a></li>
+        <div class="simple-audio-player" id="simp" data-config='{"shide_top":false,"shide_btm":false,"auto_load":false}'>
+  <div class="simp-playlist">
+    <ul>
+      <li><span class="simp-source" data-src="{{post.song.url}}">{{post.title}}</span><span class="simp-desc">{{post.artist}}</span></li>
+
+    </ul>
+  </div>
+</div>
       {% endfor %}
     </ul>
   {% else %}
