@@ -210,9 +210,12 @@ STREAM_WATCH_LOG_ENABLED = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
+"""
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+"""
+
 
 STORAGES = {
     # ...
@@ -287,3 +290,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 django_heroku.settings(locals())
+config = locals()
+config['STORAGES']['staticfiles'] = config['STATICFILES_STORAGE']
+del config['STATICFILES_STORAGE']
