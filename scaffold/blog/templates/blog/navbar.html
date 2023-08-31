@@ -30,7 +30,7 @@
 
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
-                <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+
 
                 {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'show-notifications' %}">Notifications</a>
@@ -73,9 +73,24 @@
 
 
                   {% else %}
+
                 <a class="nav-item nav-link" href="{% url 'account_login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+
+
+</div>
+                    </div>
                 {% endif %}
+
+                     <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle nav-link"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Support
+        </a>
+        <div class="dropdown-menu" aria-labelledby="supportDropdown">
+            <a class="dropdown-item" href="{% url 'support' %}">Contact Us</a>
+            <a class="dropdown-item" href="{% url 'privacy-policy' %}">Privacy</a>
+        </div>
+    </div>
             </div>
         </div>
     </div>

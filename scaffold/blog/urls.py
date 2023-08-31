@@ -1,10 +1,13 @@
 from django.urls import path
 from . import views
-from .views import AllSaveView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, SaveView, UserPostListView, LikeView,LikeCommentView, posts_of_following_profiles,  AllLikeView
+from .views import AllSaveView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, SaveView,\
+    UserPostListView, LikeView,LikeCommentView, posts_of_following_profiles,  AllLikeView, privacypolicy, support
 
 urlpatterns = [
     path('', views.first, name='firsthome'),
+    path('support/', views.support, name='support'),
     path('home/', PostListView.as_view(), name='blog-home'),
+    path('privacypolicy/', privacypolicy, name='privacy-policy'),
     path('feed/', posts_of_following_profiles, name='posts-follow-view'),
     path('post/user/<str:username>/', UserPostListView.as_view(), name='user-posts'),
     path('post/<int:pk>/', PostDetailView, name='post-detail'),

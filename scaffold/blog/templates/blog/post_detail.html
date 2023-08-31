@@ -3,12 +3,64 @@
 {% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 
-
-
-
 {% block content %}
+<div class="m-auto w-100 container">
+    <div class="content-section">
+        <h2>{{ post.title }}</h2>
+
+
+
+
+        {% if post.vibe and media_type == 'picture' %}
+    {% if post.vibe.url %}
+        <div class="cover-art">
+            <img src="{{ post.vibe.url }}" alt="vibe image" class="vibe-img">
+        </div>
+    {% else %}
+        {# Display regular image field content if not a recognized link #}
+        <img src="{{ post.vibe.url }}" alt="vibe image" class="vibe-img">
+        Your browser does not support the images element.
+    {% endif %}
+{% endif %}
+
+        {% if post.media_type == 'video'  %}
+            <div class="video-container">
+                {{ post.video_embed|safe }}
+            </div>
+
+{% elif post.link %}
+    <div class="video-container">
+        {% if youtube_match %}
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ youtube_match.3 }}" frameborder="0" allowfullscreen></iframe>
+        {% elif instagram_match %}
+            <iframe src="https://www.instagram.com/p/{{ instagram_match.4 }}/embed" frameborder="0" allowfullscreen></iframe>
+        {% elif tiktok_match %}
+            <iframe src="https://www.tiktok.com/embed/v2/{{ tiktok_match.3 }}" frameborder="0" allowfullscreen></iframe>
+        {% else %}
+            <!-- Default case: Just display the link -->
+            <a href="{{ post.link }}" target="_blank">{{ post.link }}</a>
+        {% endif %}
+    </div>
+{% endif %}
+
+
+        <p>{{ post.caption }}</p>
+        <!-- Other post details like author, date, etc. -->
+         <div class="media-body">
+            <h4 class="d-inline"><a class="mr-2" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a></h4>
+            <div id="save-section">
+                {% include 'blog/save_section.html' %}
+            </div>
+            <p><small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small></p>
+        </div>
+    </div>
+    </div>
+</div>
+
+
 <div class="col-md-10 m-auto">
 
+    <!--
 <article class="content-section" style="overflow: auto;">
 
     <div class="media">
@@ -34,7 +86,7 @@
         </div>
 
     {% endif %}
-     {% if post.video %}
+     {% if post.vibe %}
     <img src="{{post.video.url}}" style="aspect-ratio: 16 / 9;"/>
 
     {% endif %}
@@ -52,7 +104,14 @@
     <hr>
     <p class="article-content">{{ post.content|safe }}</p>
 </article>
+ -->
+    {% if post.author == user %}
+        <div class="d-inline float-right">
+            &nbsp;&nbsp;&nbsp;<a class="btn btnedit" href="{% url 'post-update' post.id %}"><i class="far fa-edit"></i></a>
+            &nbsp;&nbsp;&nbsp;<a class="btn btndel" href="{% url 'post-delete' post.id %}"><i class="far fa-trash-alt"></i></a>
+        </div>
 
+    {% endif %}
 <div id="like-section">
     {% include 'blog/like_section.html' %}
 </div>

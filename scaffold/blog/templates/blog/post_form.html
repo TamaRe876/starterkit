@@ -9,13 +9,13 @@
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">New Post</legend>
+                <legend class="border-bottom mb-4">New Vibe</legend>
 
                 {{ form.media }}
                 {{ form.title|as_crispy_field }}
-                {{ form.cover_art|as_crispy_field }}
-                <center style="color:red;"> <b>Upload either cover art or video not both at the same time</b></center>
-                 {{ form.video|as_crispy_field }}
+
+                <center style="color:red;"> <b>Upload Video/Picture </b></center>
+                 {{ form.vibe|as_crispy_field }}
                 {{ form.caption|as_crispy_field }}
                 {{ form.link|as_crispy_field }}
 
@@ -25,6 +25,26 @@
                 <a class="btn btn-danger" href="{% url 'blog-home' %}">Cancel</a>
             </div>
         </form>
+        {% if media_type == 'song' %}
+            <div id="waveform"></div>
+        {% elif media_type == 'picture' %}
+            <div class="cover-art">
+
+            </div>
+        {% elif media_type == 'video' %}
+            {% if video_embed %}
+        <div class="video-container">
+            {{ video_embed|safe }}
+        </div>
+    {% else %}
+        {# Display regular video field content if not a recognized link #}
+        <video controls class="responsive-video">
+            <source src="{{ object.vibe.url }}" type="video/mp4">
+            Your browser does not support the video element.
+        </video>
+    {% endif %}
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}

@@ -49,12 +49,50 @@
 
     <div class='posts'>
 {% for post in posts %}
+    <div class="m-auto w-100 container">
+        <div class="content-section">
+            <h2>{{ post.title }}</h2>
 
- <div class="container">
+            {% if post.media_type == 'picture' %}
+                <div class="cover-art"></div>
+            {% elif post.media_type == 'video' %}
+                <div class="video-container">
+                    {{ post.video_embed|safe }}
+                </div>
+            {% endif %}
+
+            <p>{{ post.caption }}</p>
+            <p class="article-content">{{ post.author }}</p>
+
+            <a href="{% url 'post-detail' post.id %}">[See Vibe]</a>
+            <hr>
+        </div>
+    </div>
+{% endfor %}
+
+
+
+
+
+
+
+{% endblock %}
+{% block script %}
+<script>
+
+  var colors = ['#FB9797', '#FB84BD', '#EA84FB', '#FF6D3F', '#4270E7', 'green', 'blue'];
+    $('.add-border').each(function() {
+        $(this).css('border-top', "3px solid " + colors[Math.floor(Math.random() * colors.length)]);
+    });
+
+</script>
+{% endblock %}
+
+<!-- <div class="container">
         <center>
             <h1><a class="article-title text-centered" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h1>
             <div class="card">
-                 {% if post.cover_art %}
+                 {% if post.vibe %}
     <img src="{{post.cover_art.url}}" class="card-img-top" />
 
     {% endif %}
@@ -76,7 +114,7 @@
             </div>
         </center>
     </div>
-
+ -->
 <!--
     <article class="grid text-center">
         <div class="container">
@@ -111,58 +149,3 @@
 
 
 -->
-
-
-
-      <hr>
-
-
-
-    {% endfor %}
-
-
-
-
-    {% if is_paginated %}
-
-      {% if page_obj.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.previous_page_number}}">Previous</a>
-      {% endif %}
-
-      {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-          <a class="btn btn-info mb-4" href="?page={{num}}">{{num}}</a>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-        <a class="btn btn-outline-info mb-4" href="?page={{num}}">{{num}}</a>
-        {% endif %}
-      {% endfor %}
-
-      {% if page_obj.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.paginator.num_pages}}">Last</a>
-      {% endif %}
-
-    {% endif %}
-</div>
-
-</div>
-
-
-
-
-
-
-
-{% endblock %}
-{% block script %}
-<script>
-
-  var colors = ['#FB9797', '#FB84BD', '#EA84FB', '#FF6D3F', '#4270E7', 'green', 'blue'];
-    $('.add-border').each(function() {
-        $(this).css('border-top', "3px solid " + colors[Math.floor(Math.random() * colors.length)]);
-    });
-
-</script>
-{% endblock %}
-

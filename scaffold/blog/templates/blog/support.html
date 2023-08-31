@@ -1,0 +1,34 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h1>Support</h1>
+
+<h2>Send a Support Message</h2>
+<h4 class="support-header">Your Support Messages</h4>
+<form method="post" class="support-msg">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="form-btn">Send Message</button>
+</form>
+
+
+<ul>
+    {% for message in messages %}
+    <li>
+        <p>{{ message.message }}</p>
+        {% if message.admin_response %}
+            <p class="admin-response">{{ message.admin_response }}</p>
+        {% endif %}
+        <small>Posted on {{ message.timestamp }}{% if message.responded %} - Responded{% endif %}</small>
+    </li>
+    {% endfor %}
+</ul>
+{% if user.is_staff %}
+<h4 class="support-header">Admin Response</h4>
+<form method="post" class="support-msg">
+    {% csrf_token %}
+    <textarea name="admin_response" rows="4" cols="50"></textarea>
+    <button type="submit" class="form-btn">Send Response</button>
+</form>
+{% endif %}
+{% endblock %}

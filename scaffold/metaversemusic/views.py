@@ -8,7 +8,7 @@ from web3 import Web3, HTTPProvider
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-
+from blog.models import Post
 
 web3 = Web3(Web3.HTTPProvider("https://mainnet.infura.io/v3/e49caa765fe54cc2a3c6c49b241806e2"))
 

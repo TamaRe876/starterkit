@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.contrib.auth.models import User
 from mutagen.mp3 import MP3  # For MP3 files
@@ -66,6 +68,17 @@ class NFT(models.Model):
     # New fields for minting details
     minting_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     royalty_share = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+
+    def get_media_type(self):
+        if self.music:
+            _, ext = os.path.splitext(self.music.name)
+            if ext.lower() in ['.mp3', '.wav', '.ogg']:
+                return 'song'
+            elif ext.lower() in ['.jpg', '.jpeg', '.png', '.gif']:
+                return 'picture'
+            elif ext.lower() in ['.mp4', '.avi', '.mov']:
+                return 'video'
+        return ''
 
     def get_duration_as_string(self):
         if self.duration:
