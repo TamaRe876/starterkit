@@ -22,6 +22,8 @@ from .forms import SupportMessageForm
 from .models import SupportMessage
 from django.contrib import messages
 
+def terms(request):
+    return render(request, 'blog/terms.html')
 
 
 @login_required

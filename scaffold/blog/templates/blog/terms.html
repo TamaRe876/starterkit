@@ -1,0 +1,65 @@
+{% extends 'blog/base.html' %}
+
+{%block title%}Terms of Service{%endblock%}
+
+{% block content%}
+
+    <header>
+        <h1>Terms of Service</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Introduction</h2>
+            <p>Welcome to Vibstream! These terms and conditions outline the rules and regulations for the use of our website.</p>
+        </section>
+
+        <section>
+            <h2>Intellectual Property</h2>
+            <p>The content and materials on this website are owned or licensed by Vibstream and protected by applicable intellectual property laws.</p>
+        </section>
+
+        <section>
+            <h2>Use of Our Services</h2>
+            <p>By using our website, you agree to abide by our community guidelines and not engage in any prohibited activities.</p>
+        </section>
+
+        <section>
+            <h2>Privacy</h2>
+            <p>Your privacy is important to us. We collect, use, and protect your personal information as outlined in our Privacy Policy.</p>
+        </section>
+
+        <section>
+            <h2>Disclaimers</h2>
+            <p>We provide our services "as is" and make no warranties or guarantees regarding their accuracy, reliability, or availability.</p>
+        </section>
+
+        <section>
+            <h2>Limitation of Liability</h2>
+            <p>We shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of our website.</p>
+        </section>
+
+        <section>
+            <h2>Indemnification</h2>
+            <p>You agree to indemnify and hold Vibstream harmless from any claims, losses, damages, liabilities, and expenses.</p>
+        </section>
+
+        <section>
+            <h2>Changes to Terms</h2>
+            <p>We reserve the right to modify or update these terms at any time. You are responsible for reviewing the terms periodically.</p>
+        </section>
+
+        <section>
+            <h2>Contact Us</h2>
+            <p>If you have any questions or concerns about these terms, please contact us at <a class="dropdown-item" href="{% url 'support' %}">Support</a></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Vibstream. All rights reserved.</p>
+    </footer>
+
+
+
+
+{% endblock content%}
