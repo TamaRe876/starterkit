@@ -7,6 +7,7 @@ from django_countries.widgets import CountrySelectWidget
 from django_countries.fields import CountryField
 
 
+
 class UserRegisterForm(UserCreationForm):
     USER_TYPE_CHOICES = (
         ('artist', 'Artist'),

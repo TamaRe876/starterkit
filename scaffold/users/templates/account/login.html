@@ -32,17 +32,21 @@
     text-align: center
 }
 </style>
-
+<script>
+   function onSubmit(token) {
+     document.getElementById("login-form").submit();
+   }
+ </script>
 <div class="m-auto col-md-8">
 <div class="content-section">
-    <form action="" method="POST">
+    <form action="" method="POST" id="login-form">
         {% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Login</legend>
             {{form|crispy}}
         </fieldset>
         <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Login</button>
+            <button class="btn btn-outline-info" type="submit" class="g-recaptcha" data-sitekey="6Lcs3u8nAAAAAJqfthu8Gx5KmCqaOorYRXTEnsha" data-callback='onSubmit' >Login</button>
             <small class="text-muted ml-2">
                 <a href="{% url 'password_reset' %}">Forgot Password?</a>
             </small>
