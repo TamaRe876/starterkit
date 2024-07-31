@@ -9,58 +9,67 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from blog.models import Post
-
+from django.contrib import messages
+from django.db import transaction
+from web3.exceptions import Web3Exception
 web3 = Web3(Web3.HTTPProvider("https://mainnet.infura.io/v3/e49caa765fe54cc2a3c6c49b241806e2"))
-
+from .Web3 import calculate_minting_cost, send_transaction, get_transaction_receipt
+from django.conf import settings
 
 # Create a view to create a new NFT
+
 class CreateNFTView(View):
     template_name = 'metaversemusic/create_nft.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         form = NFTForm()
-        context = {'form': form}
+        estimated_cost = calculate_minting_cost()
+        context = {'form': form, 'estimated_cost': estimated_cost}
         return render(request, self.template_name, context)
 
-    @method_decorator(login_required)  # Ensure the user is logged in
+    @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         form = CombinedForm(request.POST, request.FILES)
         if form.is_valid():
-            nft_instance = form.cleaned_data['nft_form-nft']  # Access the NFTForm field
-            genre_instance = form.cleaned_data['genre_form-genre']  # Access the GenreForm field
+            nft_instance = form.cleaned_data['nft_form-nft']
+            genre_instance = form.cleaned_data['genre_form-genre']
 
-            # Set the owner as the current user
             nft_instance.owner = request.user
 
-            # Connect to Web3
-            web3 = Web3(Web3.HTTPProvider("https://mainnet.infura.io/v3/e49caa765fe54cc2a3c6c49b241806e2"))
-            if web3.isConnected():
-                user_profile = request.user.profile  # Get the user's profile
+            try:
+                user_profile = request.user.profile
                 user_wallet_address = user_profile.bnb_wallet_address
 
-                gas_price = web3.toWei("10", "gwei")  # Gas price in GWei
-                gas_limit = 200000  # Gas limit
-
-                # Prepare the transaction
+                estimated_cost = calculate_minting_cost()
+                
                 transaction = {
-                    "to": user_wallet_address,  # Recipient address
-                    "value": web3.toWei("0.1", "ether"),  # Ether value to send
-                    "gas": gas_limit,
-                    "gasPrice": gas_price,
+                    "to": user_wallet_address,
+                    "value": Web3.to_wei(estimated_cost, 'ether'),
+                    "gas": 200000,  # You might want to estimate this dynamically as well
+                    "gasPrice": Web3.to_wei('20', 'gwei'),  # You can adjust this or fetch dynamically
                 }
 
-                # Sign and send the transaction
-                signed_txn = web3.eth.account.signTransaction(transaction, e49caa765fe54cc2a3c6c49b241806e2)
-                tx_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+                tx_hash = send_transaction(transaction, settings.PRIVATE_KEY)
+                receipt = get_transaction_receipt(tx_hash)
 
-                # Save the NFT and genre associations
-                nft_instance.save()
-                nft_instance.genre.add(genre_instance)
+                if receipt.status == 1:  # Transaction was successful
+                    with transaction.atomic():
+                        nft_instance.save()
+                        nft_instance.genre.add(genre_instance)
 
-                return redirect('nft-detail', nft_id=nft_instance.pk)
+                    messages.success(request, f"NFT created and minted successfully! Transaction hash: {tx_hash.hex()}")
+                    return redirect('nft-detail', nft_id=nft_instance.pk)
+                else:
+                    messages.error(request, "Transaction failed. Please try again.")
 
-        context = {'form': form}
+            except Web3Exception as e:
+                messages.error(request, f"Web3 error: {str(e)}")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
+
+        estimated_cost = calculate_minting_cost()
+        context = {'form': form, 'estimated_cost': estimated_cost}
         return render(request, self.template_name, context)
 
 # Create a view to list all the NFTs

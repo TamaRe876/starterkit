@@ -14,6 +14,7 @@ class Tag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=150)
+    image = models.ImageField(upload_to='post_images/', blank=True, null=True)
     vibe = models.FileField(upload_to='vibes/', blank=True, null=True)
     caption = models.TextField(max_length=500, blank=True, null=True)
     link = models.URLField(default='https://www.vibstream.com')

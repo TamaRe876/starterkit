@@ -1,151 +1,21 @@
 {% extends "blog/base.html" %}
 {% load static %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="flex w-full">
+ 
 
-<div class='allsides'>
-    <div class='sidebar'>
-        <div class="content-section" style="border-top: 4px solid red;">
-      <h4>New Vibes</h4>
-      <br>
-      <!-- <p class="text-muted">You can put any information here you'd like. -->
-          <ul class="list-group">
-              {% if posts.0 %}
-                <a href="{% url 'post-detail' posts.0.pk %}"><li class="list-item">{{ posts.0.title }}</li></a>
-              {% endif %}
-              {% if posts.1 %}
-                <a href="{% url 'post-detail' posts.1.pk %}"><li class="list-item">{{ posts.1.title }}</li></a>
-              {% endif %}
-              {% if posts.2 %}
-                <a href="{% url 'post-detail' posts.2.pk %}"><li class="list-item">{{ posts.2.title }}</li></a>
-              {% endif %}
-              {% if posts.3 %}
-                <a href="{% url 'post-detail' posts.3.pk %}"><li class="list-item">{{ posts.3.title }}</li></a>
-              {% endif %}
-              {% if posts.4 %}
-                <a href="{% url 'post-detail' posts.4.pk %}"><li class="list-item">{{ posts.4.title }}</li></a>
-              {% endif %}
-          </ul>
-          <br>
-
-
-  </div>
-
-  <!-- PEOPLE YOU CAN FOLLOW -->
-
-  <div class="content-section  " style="border-top: 4px solid blue;">
-    <h4>Vibes to follow</h4>
-    <br>
-        <ul class="list-group">
-          {% for user in random_users %}
-            <a href="{% url 'profile-detail-view' user.pk %}"><li class="list-group-item list-group-item-light">{{ user.username }}</li></a>
-          {% endfor %}
-
-        </ul>
-        <br>
-  </div>
-    </div>
-
-    <div class='posts'>
-{% for post in posts %}
-    <div class="m-auto w-100 container">
-        <div class="content-section">
-            <h2>{{ post.title }}</h2>
-
-            {% if post.media_type == 'picture' %}
-                <div class="cover-art"></div>
-            {% elif post.media_type == 'video' %}
-                <div class="video-container">
-                    {{ post.video_embed|safe }}
-                </div>
-            {% endif %}
-
-            <p>{{ post.caption }}</p>
-            <p class="article-content">{{ post.author }}</p>
-
-            <a href="{% url 'post-detail' post.id %}">[See Vibe]</a>
-            <hr>
-        </div>
-    </div>
-{% endfor %}
-
-
-
-
-
-
-
+ {% include 'blog/partials/post.html' %}
+</div>
 {% endblock %}
+
 {% block script %}
 <script>
-
-  var colors = ['#FB9797', '#FB84BD', '#EA84FB', '#FF6D3F', '#4270E7', 'green', 'blue'];
-    $('.add-border').each(function() {
-        $(this).css('border-top', "3px solid " + colors[Math.floor(Math.random() * colors.length)]);
-    });
-
+  const colors = ['#FB9797', '#FB84BD', '#EA84FB', '#FF6D3F', '#4270E7', 'green', 'blue'];
+  document.querySelectorAll('.add-border').forEach(el => {
+    el.style.borderTop = `3px solid ${colors[Math.floor(Math.random() * colors.length)]}`;
+  });
 </script>
 {% endblock %}
-
-<!-- <div class="container">
-        <center>
-            <h1><a class="article-title text-centered" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h1>
-            <div class="card">
-                 {% if post.vibe %}
-    <img src="{{post.cover_art.url}}" class="card-img-top" />
-
-    {% endif %}
-
-                <div class="card-img-overlay card-inverse">
-                    <h4 class="text-stroke text-white pb-5">
-                        <p class="article-content">{{ post.content|safe|linebreaks|truncatewords_html:"20" }}</p>
-
-                    </h4>
-                    <div class="card-block pt-5">
-                        <a href="#" class="card-link text-white">Link
-                        </a>
-                    </div>
-                </div>
-
-                <p class="article-content">{{ post.author }}</p>
-
-                <a href="{% url 'post-detail' post.id %}">[Read full post]</a>
-            </div>
-        </center>
-    </div>
- -->
-<!--
-    <article class="grid text-center">
-        <div class="container">
-              {% if post.cover_art %}
-    <img src="{{post.cover_art.url}}" style="max-width:300px; max-height: 300px;"/>
-
-    {% endif %}
-            <div class="text-block">
-                 <div class="media">
-
-          <div class="media-body">
-
-              <p class="mb-0">
-                <a class="mr-2 h5 text-centered" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a>
-              </p>
-              <small class="text-muted text-centered" id="post-date">{{ post.date_posted|date:"F d, Y-h:i A" }}</small>
-          </div>
-      </div>
-        <img class="rounded-circle article-img media " src="{{post.author.profile.image.url}}" alt="image">
-
-      <hr>
-      <h4><a class="article-title text-centered" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
-
-            </div>
-        </div>
-
-        {% if post.video %}
-    <img src="{{post.video.url}}" style="aspect-ratio: 16 / 9;"/>
-
-    {% endif %}
-
-
-
--->

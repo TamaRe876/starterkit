@@ -3,16 +3,16 @@
 {% block title %}Delete Post{% endblock %}
 
 {% block content %}
-<div class="content-section">
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
     <form action="" method="POST">
         {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Delete Post</legend>
-            <h2>Are you sure you want to delete the post "{{object.title}} ?"</h2>
+        <fieldset class="mb-6">
+            <legend class="text-2xl font-bold mb-4 pb-2 border-b">Delete Post</legend>
+            <h2 class="text-lg mb-4">Are you sure you want to delete the post "{{object.title}}"?</h2>
         </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
-            <a class="btn btn-outline-secondary" href="{% url 'post-detail' object.id %}">Cancel</a>
+        <div class="flex space-x-4">
+            <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-300" type="submit">Yes, Delete</button>
+            <a class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition duration-300" href="{% url 'post-detail' object.id %}">Cancel</a>
         </div>
     </form>
 </div>

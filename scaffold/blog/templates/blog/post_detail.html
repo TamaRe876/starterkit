@@ -1,131 +1,142 @@
 {% extends "blog/base.html" %}
-
 {% load static %}
+
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-<div class="m-auto w-100 container">
-    <div class="content-section">
-        <h2>{{ post.title }}</h2>
+<div class="container mx-auto px-4 py-8">
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="p-6">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800">{{ post.title }}</h2>
 
-
-
-
-        {% if post.vibe and media_type == 'picture' %}
-    {% if post.vibe.url %}
-        <div class="cover-art">
-            <img src="{{ post.vibe.url }}" alt="vibe image" class="vibe-img">
+      <div class="flex items-center space-x-6 mb-6">
+        <img src="{{ post.cover_art.url }}" alt="Cover Art" class="w-32 h-32 object-cover rounded-lg shadow-md">
+        <div class="flex-grow">
+          <div id="waveform-{{ post.id }}" class="w-full"></div>
+          <button id="playBtn-{{ post.id }}" class="mt-4 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition duration-300 flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </button>
         </div>
-    {% else %}
-        {# Display regular image field content if not a recognized link #}
-        <img src="{{ post.vibe.url }}" alt="vibe image" class="vibe-img">
-        Your browser does not support the images element.
-    {% endif %}
-{% endif %}
+      </div>
 
-        {% if post.media_type == 'video'  %}
-            <div class="video-container">
-                {{ post.video_embed|safe }}
-            </div>
+      <p class="text-gray-700 mb-6 text-lg">{{ post.caption }}</p>
 
-{% elif post.link %}
-    <div class="video-container">
-        {% if youtube_match %}
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ youtube_match.3 }}" frameborder="0" allowfullscreen></iframe>
-        {% elif instagram_match %}
-            <iframe src="https://www.instagram.com/p/{{ instagram_match.4 }}/embed" frameborder="0" allowfullscreen></iframe>
-        {% elif tiktok_match %}
-            <iframe src="https://www.tiktok.com/embed/v2/{{ tiktok_match.3 }}" frameborder="0" allowfullscreen></iframe>
-        {% else %}
-            <!-- Default case: Just display the link -->
-            <a href="{{ post.link }}" target="_blank">{{ post.link }}</a>
-        {% endif %}
-    </div>
-{% endif %}
-
-
-        <p>{{ post.caption }}</p>
-        <!-- Other post details like author, date, etc. -->
-         <div class="media-body">
-            <h4 class="d-inline"><a class="mr-2" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a></h4>
-            <div id="save-section">
-                {% include 'blog/save_section.html' %}
-            </div>
-            <p><small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small></p>
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+          <img class="w-12 h-12 rounded-full mr-4 border-2 border-blue-500" src="{{ post.author.profile.image.url }}" alt="Author image">
+          <div>
+            <h4 class="font-bold text-lg"><a class="text-gray-900 hover:text-blue-600" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a></h4>
+            <p class="text-sm text-gray-600">{{ post.date_posted|date:"F d, Y" }}</p>
+          </div>
         </div>
-    </div>
-    </div>
-</div>
-
-
-<div class="col-md-10 m-auto">
-
-    <!--
-<article class="content-section" style="overflow: auto;">
-
-    <div class="media">
-        <img class="rounded-circle article-img" src="{{post.author.profile.image.url}}" alt="image">
-        <div class="media-body">
-            <h4 class="d-inline"><a class="mr-2" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a></h4>
-            <div id="save-section">
-                {% include 'blog/save_section.html' %}
-            </div>
-            <p><small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small></p>
+        <div id="save-section">
+          {% include 'blog/save_section.html' %}
         </div>
+      </div>
+
+      <div class="flex items-center space-x-4 mt-4">
+        <small class="flex items-center">
+          <button class="text-red-500 mr-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+          </button>
+          <span>{{ post.likes_count }}</span>
+        </small>
+        <small class="flex items-center">
+          <button class="text-blue-500 mr-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+          </button>
+          <span>{{ post.comments_count }}</span>
+        </small>
+        <small class="flex items-center">
+          <svg class="w-5 h-5 text-gray-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+          <span>{{ post.play_count }}</span>
+        </small>
+      </div>
     </div>
-    {% if post.cover_art %}
-    <img src="{{post.cover_art.url}}" style="max-width:300px; max-height: 400px;"/>
-
-    {% endif %}
-    <hr>
-    <h3 class="d-inline"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
-    {% if post.author == user %}
-        <div class="d-inline float-right">
-            &nbsp;&nbsp;&nbsp;<a class="btn btnedit" href="{% url 'post-update' post.id %}"><i class="far fa-edit"></i></a>
-            &nbsp;&nbsp;&nbsp;<a class="btn btndel" href="{% url 'post-delete' post.id %}"><i class="far fa-trash-alt"></i></a>
-        </div>
-
-    {% endif %}
-     {% if post.vibe %}
-    <img src="{{post.video.url}}" style="aspect-ratio: 16 / 9;"/>
-
-    {% endif %}
-
-    {% if post.link %}
-
-  <div id="waveform">
-    <div id="time">0:00</div>
-    <div id="duration">0:00</div>
-    <div id="hover"></div>
   </div>
 
-    {% endif %}
+  {% if post.author == user %}
+    <div class="mt-6 text-right">
+      <a class="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-300 mr-2" href="{% url 'post-update' post.id %}">
+        <i class="far fa-edit mr-2"></i>Edit
+      </a>
+      <a class="inline-block bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition duration-300" href="{% url 'post-delete' post.id %}">
+        <i class="far fa-trash-alt mr-2"></i>Delete
+      </a>
+    </div>
+  {% endif %}
 
-    <hr>
-    <p class="article-content">{{ post.content|safe }}</p>
-</article>
- -->
-    {% if post.author == user %}
-        <div class="d-inline float-right">
-            &nbsp;&nbsp;&nbsp;<a class="btn btnedit" href="{% url 'post-update' post.id %}"><i class="far fa-edit"></i></a>
-            &nbsp;&nbsp;&nbsp;<a class="btn btndel" href="{% url 'post-delete' post.id %}"><i class="far fa-trash-alt"></i></a>
-        </div>
-
-    {% endif %}
-<div id="like-section">
+  <div id="like-section" class="mt-8">
     {% include 'blog/like_section.html' %}
-</div>
+  </div>
 
-<hr>
+  <hr class="my-8 border-gray-300">
 
-<div class="main-comment-section">
+  <div class="main-comment-section">
     {% include 'blog/comments.html' %}
+  </div>
 </div>
 
-<br><br>
+<script>
+  document.addEventListener('DOMContentLoaded', async function() {
+    const postId = '{{ post.id }}';
+    const waveformContainer = document.getElementById(`waveform-${postId}`);
+    const playBtn = document.getElementById(`playBtn-${postId}`);
 
-</div>
+    playBtn.disabled = true;
 
+    const wavesurfer = WaveSurfer.create({
+      container: waveformContainer,
+      waveColor: 'violet',
+      progressColor: 'purple',
+      cursorColor: 'navy',
+      barWidth: 2,
+      barRadius: 3,
+      cursorWidth: 1,
+      height: 50,
+      barGap: 3,
+      backend: 'WebAudio',
+      responsive: true,
+      partialRender: true
+    });
 
+    try {
+      const response = await fetch('{{ post.vibe.url }}', { headers: { 'Range': 'bytes=0-100000' } });
+      const arrayBuffer = await response.arrayBuffer();
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
 
+      wavesurfer.loadDecodedBuffer(audioBuffer);
+
+      const fullResponse = await fetch('{{ post.vibe.url }}');
+      const fullArrayBuffer = await fullResponse.arrayBuffer();
+      const fullAudioBuffer = await audioContext.decodeAudioData(fullArrayBuffer);
+
+      wavesurfer.loadDecodedBuffer(fullAudioBuffer);
+
+      playBtn.disabled = false;
+    } catch (error) {
+      console.error('Error loading audio:', error);
+      waveformContainer.innerHTML = 'Audio preview unavailable';
+      return;
+    }
+
+    playBtn.addEventListener('click', function() {
+      wavesurfer.playPause();
+      this.innerHTML = wavesurfer.isPlaying() ? 
+        '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' : 
+        '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+    });
+  });
+</script>
 {% endblock %}

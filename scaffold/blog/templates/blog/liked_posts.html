@@ -1,76 +1,20 @@
-{% extends "blog/base.html" %}
+<form action="{% url 'post-like' %}" method="POST" class="flex items-center space-x-2">
+  {% csrf_token %}
 
-{% block title %}Liked Posts{% endblock %}
-
-{% block content %}
-
-<div class="col-md-8 m-auto">
-
-<div class="content-section">
-  <h3>Liked Posts ({{liked_posts|length}})</h3>
-</div>
-
-{% if not liked_posts %}
-  <p class="content-section">You have not liked any post</p>
-{% endif %}
-
-    {% for post in liked_posts %}
-
-    <article class="content-section" style="overflow: auto;">
-      <div class="media">
-          <img class="rounded-circle article-img" src="{{post.author.profile.image.url}}" alt="image">
-          <div class="media-body">
-              <p>
-                <a class="mr-2 h4" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a>
-              </p>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y-h:i A" }}</small>
-          </div>
-      </div>
-      <hr>
-      <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
-      <hr>
-      <p class="article-content">{{ post.content|safe|linebreaks|truncatewords_html:"20" }}<a href="{% url 'post-detail' post.id %}">[Read full post]</a></p>
-    </article>
-
-    {% endfor %}
-
-    {% if is_paginated %}
-
-      {% if page_obj.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.previous_page_number}}">Previous</a>
+  {% if user.is_authenticated %}
+      {% if liked %}
+          <button id="like" type="submit" name="post_id" value="{{post.id}}" class="p-2 text-red-500 hover:text-red-600 focus:outline-none transition duration-300">
+              <i class="fas fa-heart"></i>
+          </button>
+      {% else %}
+          <button id="like" type="submit" name="post_id" value="{{post.id}}" class="p-2 text-gray-400 hover:text-red-500 focus:outline-none transition duration-300">
+              <i class="far fa-heart"></i>
+          </button>
       {% endif %}
-
-      {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-          <a class="btn btn-info mb-4" href="?page={{num}}">{{num}}</a>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-        <a class="btn btn-outline-info mb-4" href="?page={{num}}">{{num}}</a>
-        {% endif %}
-      {% endfor %}
-
-      {% if page_obj.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.paginator.num_pages}}">Last</a>
-      {% endif %}
-
-    {% endif %}
-
-</div>
-
-<!-- SIDEBAR
-<div class="col-md-4">
-  <div class="content-section">
-      <h3>Our Sidebar</h3>
-      <p class="text-muted">You can put any information here you'd like.
-          <ul class="list-group">
-              <li class="list-group-item list-group-item-light">Latest Posts</li>
-              <li class="list-group-item list-group-item-light">Announcements</li>
-              <li class="list-group-item list-group-item-light">Calendars</li>
-              <li class="list-group-item list-group-item-light">etc</li>
-          </ul>
-      </p>
-  </div>
-</div>   -->
-
-{% endblock %}
+  {% else %}
+      <span class="text-sm text-gray-500">Login to like</span>
+  {% endif %}
+  <span class="text-sm text-gray-600">
+      {{total_likes}} Like{{ total_likes|pluralize }}
+  </span>
+</form>

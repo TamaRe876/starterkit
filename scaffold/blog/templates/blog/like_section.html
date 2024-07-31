@@ -1,14 +1,20 @@
-<form action="{% url 'post-like' %}" method="POST">
+<form action="{% url 'post-like' %}" method="POST" class="flex items-center">
     {% csrf_token %}
 
     {% if user.is_authenticated %}
         {% if liked %}
-            <button id="like" type="submit" name="post_id" value="{{post.id}}" class="btn btnhrt"><i class="fas fa-heart"></i></button>
+            <button id="like" type="submit" name="post_id" value="{{post.id}}" class="p-2 text-red-500 hover:text-red-600 focus:outline-none">
+                <i class="fas fa-heart"></i>
+            </button>
         {% else %}
-            <button id="like" type="submit" name="post_id" value="{{post.id}}" class="btn btnhrt"><i class="far fa-heart"></i></button>
+            <button id="like" type="submit" name="post_id" value="{{post.id}}" class="p-2 text-gray-500 hover:text-red-500 focus:outline-none">
+                <i class="far fa-heart"></i>
+            </button>
         {% endif %}
     {% else %}
-        <small>Login to like</small>
+        <small class="text-sm text-gray-500">Login to like</small>
     {% endif %}
-    - {{total_likes}} Like{{ total_likes|pluralize }}
+    <span class="ml-2 text-sm text-gray-600">
+        {{total_likes}} Like{{ total_likes|pluralize }}
+    </span>
 </form>

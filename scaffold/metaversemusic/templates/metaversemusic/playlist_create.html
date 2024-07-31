@@ -1,10 +1,112 @@
 {% extends 'blog/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
+{% endblock %}
 
 {% block content %}
-  <h1>Create Playlist</h1>
-  <form method="POST">
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-gray-100">Create Playlist</h1>
+  <form method="POST" id="playlist-form" class="bg-gray-800 rounded-lg shadow-lg p-6">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Create</button>
+    
+    <div class="mt-4">
+      <input type="text" id="song-search" placeholder="Search for songs" class="w-full px-3 py-2 bg-gray-700 text-gray-100 rounded">
+    </div>
+    
+    <div id="search-results" class="mt-2 max-h-60 overflow-y-auto">
+      <!-- Filtered songs will be displayed here -->
+    </div>
+
+    <div id="selected-songs" class="mt-4">
+      <h3 class="text-xl font-semibold mb-2 text-gray-100">Selected Songs:</h3>
+      <ul id="selected-songs-list"></ul>
+    </div>
+
+    <button type="submit" class="mt-4 bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Create Playlist</button>
   </form>
+
+  <div id="aplayer" class="mt-8"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const songSearch = document.getElementById('song-search');
+  const searchResults = document.getElementById('search-results');
+  const selectedSongsList = document.getElementById('selected-songs-list');
+  const playlistForm = document.getElementById('playlist-form');
+  let allSongs = [];
+
+  const ap = new APlayer({
+    container: document.getElementById('aplayer'),
+    theme: '#f1c40f',
+    audio: []
+  });
+
+  // Fetch all songs when the page loads
+  fetch('/api/all-songs/')
+    .then(response => response.json())
+    .then(data => {
+      allSongs = data;
+    });
+
+  songSearch.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const filteredSongs = allSongs.filter(song => 
+      song.title.toLowerCase().includes(searchTerm) || 
+      song.artist.toLowerCase().includes(searchTerm)
+    );
+    displayFilteredSongs(filteredSongs);
+  });
+
+  function displayFilteredSongs(songs) {
+    searchResults.innerHTML = '';
+    songs.forEach(song => {
+      const songElement = document.createElement('div');
+      songElement.className = 'p-2 hover:bg-gray-700 cursor-pointer';
+      songElement.textContent = `${song.title} - ${song.artist}`;
+      songElement.addEventListener('click', () => addSongToPlaylist(song));
+      searchResults.appendChild(songElement);
+    });
+  }
+
+  function addSongToPlaylist(song) {
+    const listItem = document.createElement('li');
+    listItem.className = 'flex justify-between items-center p-2 bg-gray-700 rounded mb-2';
+    listItem.innerHTML = `
+      <span>${song.title} - ${song.artist}</span>
+      <button type="button" class="text-red-500 hover:text-red-700">Remove</button>
+    `;
+    listItem.querySelector('button').addEventListener('click', () => {
+      listItem.remove();
+      ap.list.remove(ap.list.audios.findIndex(audio => audio.name === song.title));
+    });
+    selectedSongsList.appendChild(listItem);
+
+    ap.list.add({
+      name: song.title,
+      artist: song.artist,
+      url: song.file_url,
+      cover: song.cover_art_url
+    });
+  }
+
+  playlistForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const playlistName = document.querySelector('input[name="name"]').value;
+    const selectedSongs = Array.from(selectedSongsList.children).map(li => li.textContent.split(' - ')[0]);
+    
+    // Here you would typically send the form data to the server
+    console.log('Playlist created:', {
+      name: playlistName,
+      songs: selectedSongs
+    });
+  });
+});
+</script>
 {% endblock %}

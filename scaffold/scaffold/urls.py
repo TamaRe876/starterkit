@@ -51,6 +51,7 @@ urlpatterns = [
     path('friend/', include('friend.urls', namespace='friend')),
     path('metaversemusic/', include('metaversemusic.urls')),
     path('search/', search, name='search'),
+    path("__reload__/", include("django_browser_reload.urls")),
 
 
 ]

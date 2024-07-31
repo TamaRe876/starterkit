@@ -1,18 +1,45 @@
 {% extends 'blog/base.html' %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
+{% endblock %}
+
 {% block content %}
-  <h1>{{ playlist.name }}</h1>
-  <p>Created by: {{ playlist.user }}</p>
-  <h3>Songs:</h3>
-  <ul>
-    {% for song in playlist.song_ids.all %}
-      <li>{{ song.title }} by {{ song.song.artist }}</li>
-    {% endfor %}
-  </ul>
-  <h3>Tags:</h3>
-  <ul>
-    {% for tag in playlist.tags.all %}
-      <li>{{ tag.name }}</li>
-    {% endfor %}
-  </ul>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-4 text-gray-100">{{ playlist.name }}</h1>
+  <p class="text-gray-300 mb-4">Created by: {{ playlist.user }}</p>
+
+  <div id="aplayer" class="mb-8"></div>
+
+  <div class="bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+    <h3 class="text-xl font-semibold mb-2 text-gray-100">Tags:</h3>
+    <ul class="flex flex-wrap gap-2">
+      {% for tag in playlist.tags.all %}
+        <li class="bg-orange-500 text-gray-900 px-3 py-1 rounded-full text-sm">{{ tag.name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  new APlayer({
+    container: document.getElementById('aplayer'),
+    theme: '#f1c40f',
+    audio: [
+      {% for song in playlist.song_ids.all %}
+      {
+        name: '{{ song.title }}',
+        artist: '{{ song.song.artist }}',
+        url: '{{ song.song.file.url }}',
+        cover: '{{ song.song.cover_art.url|default:"https://example.com/default-cover.jpg" }}'
+      }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ]
+  });
+});
+</script>
 {% endblock %}

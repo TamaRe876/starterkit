@@ -6,36 +6,35 @@
 {% block content %}
 
 {% if notifications|length == 0 %}
-    <span class="content-section container">No Notifications</span>
+    <span class="container p-4 bg-gray-100 rounded-lg shadow">No Notifications</span>
 {% endif %}
 
-<div class="col-md-8 m-auto">
-
+<div class="max-w-3xl mx-auto">
 
 {% for notification in notifications %}
-    <div class="card">
-        <div class="card-body">
-            <img class="rounded-circle article-img" src="{{notification.sender.profile.image.url}}" alt="image">
-            <span class="card-title h4"><a href="{% url 'profile-detail-view' notification.sender.id %}" >{{notification.sender}}</a></span>
-            <span class="text-muted float-right small">{{notification.date|naturaltime}}</span>
-            <br><br>
+    <div class="bg-white rounded-lg shadow-md mb-4">
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <img class="w-10 h-10 rounded-full mr-3" src="{{notification.sender.profile.image.url}}" alt="Profile image">
+                    <a href="{% url 'profile-detail-view' notification.sender.id %}" class="text-lg font-semibold text-blue-600 hover:text-blue-800">{{notification.sender}}</a>
+                </div>
+                <span class="text-sm text-gray-500">{{notification.date|naturaltime}}</span>
+            </div>
+            
             {% if notification.notification_type == 1 %}
-                <p class="card-text"><i class="far fa-thumbs-up"></i>&nbsp;&nbsp;Liked your post "<a href="{% url 'post-detail' notification.post.id %}" >{{notification.post}}</a>"</p>
+                <p class="text-gray-700"><i class="far fa-thumbs-up text-blue-500 mr-2"></i>Liked your post "<a href="{% url 'post-detail' notification.post.id %}" class="text-blue-600 hover:underline">{{notification.post}}</a>"</p>
             {% elif notification.notification_type == 2 %}
-                <p class="card-text"><i class="fas fa-user-friends"></i>&nbsp;&nbsp;Started following you</p>
+                <p class="text-gray-700"><i class="fas fa-user-friends text-green-500 mr-2"></i>Started following you</p>
             {% elif notification.notification_type == 3 %}
-                <p class="card-text"><i class="far fa-comment-dots"></i>&nbsp;&nbsp;Commented "{{notification.text_preview}}" on your post "<a href="{% url 'post-detail' notification.post.id %}" >{{notification.post}}</a>"</p>
+                <p class="text-gray-700"><i class="far fa-comment-dots text-yellow-500 mr-2"></i>Commented "{{notification.text_preview}}" on your post "<a href="{% url 'post-detail' notification.post.id %}" class="text-blue-600 hover:underline">{{notification.post}}</a>"</p>
             {% elif notification.notification_type == 4 %}
-                <p class="card-text"><i class="fas fa-reply"></i>&nbsp;&nbsp;Replied "{{notification.text_preview}}" to a comment on your post "<a href="{% url 'post-detail' notification.post.id %}" >{{notification.post}}</a>"</p>
+                <p class="text-gray-700"><i class="fas fa-reply text-purple-500 mr-2"></i>Replied "{{notification.text_preview}}" to a comment on your post "<a href="{% url 'post-detail' notification.post.id %}" class="text-blue-600 hover:underline">{{notification.post}}</a>"</p>
             {% endif %}
         </div>
     </div>
-    <br>
 {% endfor %}
 
-<br><br>
-
 </div>
-
 
 {% endblock %}

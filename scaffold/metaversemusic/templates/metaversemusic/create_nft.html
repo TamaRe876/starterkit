@@ -1,40 +1,48 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<h1>NFT Creation Form</h1>
+<div class="max-w-2xl mx-auto mt-8 p-6 bg-gray-100 rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">NFT Creation Form</h1>
 
-
-
-
- <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        {% for field in form %}
+            <div class="mb-4">
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                    <p class="mt-1 text-sm text-gray-500">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button id="connect-wallet" class="mt-6 w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+          Connect Wallet
+      </button>
 
-        <button type="submit">Create NFT</button>
+        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+            Create NFT
+        </button>
     </form>
 
+  
+</div>
 
-<!-- In your template -->
-<button id="connect-wallet">Connect Wallet</button>
 <script>
 document.getElementById("connect-wallet").addEventListener("click", async () => {
-  if (window.ethereum) {
-    try {
-      await window.ethereum.enable();
-      alert("Wallet connected!");
-      // You can trigger form submission or other actions here
-    } catch (error) {
-      console.error("Wallet connection error:", error);
+    if (window.ethereum) {
+        try {
+            await window.ethereum.enable();
+            alert("Wallet connected!");
+            // You can trigger form submission or other actions here
+        } catch (error) {
+            console.error("Wallet connection error:", error);
+        }
+    } else {
+        alert("Web3 wallet not found. Install MetaMask or another compatible wallet.");
     }
-  } else {
-    alert("Web3 wallet not found. Install MetaMask or another compatible wallet.");
-  }
 });
 </script>
-
-
-
-
-
 {% endblock content %}

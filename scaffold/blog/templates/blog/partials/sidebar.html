@@ -1,0 +1,26 @@
+<aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen bg-gray-900 text-gray-100 transition-transform -translate-x-full md:translate-x-0">
+    <div class="h-full px-3 py-4 overflow-y-auto">
+        <button data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="md:hidden absolute top-2 right-2 inline-flex items-center p-2 text-sm text-gray-400 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600">
+            <span class="sr-only">Close sidebar</span>
+            <svg class="w-6 h-6" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        {% include 'blog/partials/navbar.html' %}
+    </div>
+</aside>
+
+<script>
+    function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        dropdown.classList.toggle('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const drawerToggle = document.querySelector('[data-drawer-toggle]');
+        const sidebar = document.getElementById('default-sidebar');
+        drawerToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    });
+</script>

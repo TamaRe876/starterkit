@@ -4,68 +4,48 @@
 
 {% block content %}
 
-<div class="col-md-8 m-auto">
-
-<div class="content-section">
-  <h2 class="mb-3">Posts by {{view.kwargs.username}} ({{page_obj.paginator.count}})</h2>
-</div>
+<div class="max-w-3xl mx-auto">
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h2 class="text-2xl font-bold mb-3">Posts by {{view.kwargs.username}} ({{page_obj.paginator.count}})</h2>
+    </div>
 
     {% for post in posts %}
-    <article class="content-section" style="overflow: auto;">
-      <div class="media">
-          <img class="rounded-circle article-img" src="{{post.author.profile.image.url}}" alt="image">
-          <div class="media-body">
-              <h4><a class="mr-2" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a></h4>
-              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-          </div>
-      </div>
-      <hr>
-      <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
-
-      <hr>
-      
-      <p class="article-content">{{ post.content|safe }}</p>
+    <article class="bg-white shadow-md rounded-lg p-6 mb-6 overflow-auto">
+        <div class="flex items-center mb-4">
+            <img class="w-12 h-12 rounded-full mr-4" src="{{post.author.profile.image.url}}" alt="image">
+            <div>
+                <h4 class="text-lg font-semibold"><a class="hover:text-blue-600" href="{% url 'profile-detail-view' post.author.pk %}">{{ post.author }}</a></h4>
+                <small class="text-gray-500">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+        </div>
+        <hr class="my-4">
+        <h3 class="text-xl font-bold mb-4"><a class="hover:text-blue-600" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
+        <hr class="my-4">
+        <div class="prose">{{ post.content|safe }}</div>
     </article>
-    
     {% endfor %}
-    
+
     {% if is_paginated %}
-
-      {% if page_obj.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.previous_page_number}}">Previous</a>
-      {% endif %}
-
-      {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-          <a class="btn btn-info mb-4" href="?page={{num}}">{{num}}</a>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-        <a class="btn btn-outline-info mb-4" href="?page={{num}}">{{num}}</a>
+    <div class="flex justify-center space-x-2 mt-6">
+        {% if page_obj.has_previous %}
+            <a class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" href="?page=1">First</a>
+            <a class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" href="?page={{page_obj.previous_page_number}}">Previous</a>
         {% endif %}
-      {% endfor %}
 
-      {% if page_obj.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.paginator.num_pages}}">Last</a>
-      {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="px-4 py-2 bg-blue-600 text-white rounded" href="?page={{num}}">{{num}}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" href="?page={{num}}">{{num}}</a>
+            {% endif %}
+        {% endfor %}
 
+        {% if page_obj.has_next %}
+            <a class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" href="?page={{page_obj.next_page_number}}">Next</a>
+            <a class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" href="?page={{page_obj.paginator.num_pages}}">Last</a>
+        {% endif %}
+    </div>
     {% endif %}
-
 </div>
-
-<!-- SIDEBAR -->
-<!-- <div class="col-md-4">
-  <div class="content-section">
-      <h3>Our Sidebar</h3>
-      <p class="text-muted">You can put any information here you'd like.
-          <ul class="list-group">
-              <li class="list-group-item list-group-item-light">Latest Posts</li>
-              <li class="list-group-item list-group-item-light">Announcements</li>
-              <li class="list-group-item list-group-item-light">Calendars</li>
-              <li class="list-group-item list-group-item-light">etc</li>
-          </ul>
-      </p>
-  </div>
-</div>   -->
 
 {% endblock %}

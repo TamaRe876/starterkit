@@ -1,22 +1,64 @@
 {% extends 'blog/base.html' %}
+{% load static %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js" integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/APlayer.min.css' %}">
+{% endblock %}
 
 {% block content %}
-  <h1>Playlists</h1>
-  {% if playlists %}
-    <ul>
-      {% for playlist in playlists %}
-        <li><a href="{% url 'metaversemusic:playlist-detail' playlist.pk %}">{{ playlist.name }}</a></li>
-        <div class="simple-audio-player" id="simp" data-config='{"shide_top":false,"shide_btm":false,"auto_load":false}'>
-  <div class="simp-playlist">
-    <ul>
-      <li><span class="simp-source" data-src="{{post.song.url}}">{{post.title}}</span><span class="simp-desc">{{post.artist}}</span></li>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6 text-gray-100">Playlists</h1>
 
-    </ul>
-  </div>
-</div>
+  {% if playlists %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for playlist in playlists %}
+        <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+          <div class="p-4">
+            <h2 class="text-xl font-semibold mb-2 text-gray-100">
+              <a href="{% url 'metaversemusic:playlist-detail' playlist.pk %}" class="hover:text-orange-500">
+                {{ playlist.name }}
+              </a>
+            </h2>
+            <div id="aplayer-{{ playlist.pk }}" class="aplayer"></div>
+          </div>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
-    <p>No playlists available.</p>
+    <p class="text-gray-400">No playlists available.</p>
   {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js" integrity="sha512-RWosNnDNw8FxHibJqdFRySIswOUgYhFxnmYO3fp+BgCU7gfo4z0oS7mYFBvaa8qu+axY39BmQOrhW3Tp70XbaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    {% for playlist in playlists %}
+      new APlayer({
+        container: document.getElementById('aplayer-{{ playlist.pk }}'),
+        mini: false,
+        autoplay: false,
+        theme: '#f1c40f',
+        loop: 'all',
+        order: 'list',
+        preload: 'auto',
+        volume: 0.7,
+        mutex: true,
+        listFolded: false,
+        listMaxHeight: 90,
+        audio: [
+          {% for song in playlist.songs.all %}
+          {
+            name: '{{ song.title }}',
+            artist: '{{ song.artist }}',
+            url: '{{ song.file.url }}',
+            cover: '{{ song.cover_art.url }}'
+          }{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        ]
+      });
+    {% endfor %}
+  });
+</script>
 {% endblock %}

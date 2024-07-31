@@ -4,47 +4,48 @@
 {% block title %}Post{% endblock %}
 
 {% block content %}
-<div class="m-auto w-100 container">
-    <div class="content-section">
-        <form action="" method="POST" enctype="multipart/form-data">
+<div class="max-w-2xl mx-auto bg-blue-100 rounded-lg shadow-md p-6">
+    <div class="space-y-6">
+        <form action="" method="POST" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">New Vibe</legend>
+            <fieldset>
+                <legend class="text-2xl font-bold mb-4 pb-2 border-b">New Vibe</legend>
 
                 {{ form.media }}
                 {{ form.title|as_crispy_field }}
 
-                <center style="color:red;"> <b>Upload Video/Picture </b></center>
-                 {{ form.vibe|as_crispy_field }}
+                <div class="font-semibold mt-4 mb-2">Upload Video/Picture</div>
+                {{ form.vibe|as_crispy_field }}
+                {{ form.vibe|as_crispy_field }}
                 {{ form.caption|as_crispy_field }}
                 {{ form.link|as_crispy_field }}
-
             </fieldset>
-            <div class="form-group">
-                <button class="btn btn-info" type="submit">Post</button>
-                <a class="btn btn-danger" href="{% url 'blog-home' %}">Cancel</a>
+            <div class="flex space-x-4">
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition duration-200">
+                    Post
+                </button>
+                <a href="{% url 'blog-home' %}" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 transition duration-200">
+                    Cancel
+                </a>
             </div>
         </form>
-        {% if media_type == 'song' %}
-            <div id="waveform"></div>
-        {% elif media_type == 'picture' %}
-            <div class="cover-art">
 
-            </div>
+        {% if media_type == 'song' %}
+            <div id="waveform" class="mt-6"></div>
+        {% elif media_type == 'picture' %}
+            <div class="cover-art mt-6"></div>
         {% elif media_type == 'video' %}
             {% if video_embed %}
-        <div class="video-container">
-            {{ video_embed|safe }}
-        </div>
-    {% else %}
-        {# Display regular video field content if not a recognized link #}
-        <video controls class="responsive-video">
-            <source src="{{ object.vibe.url }}" type="video/mp4">
-            Your browser does not support the video element.
-        </video>
-    {% endif %}
+                <div class="video-container mt-6">
+                    {{ video_embed|safe }}
+                </div>
+            {% else %}
+                <video controls class="w-full mt-6 rounded-lg">
+                    <source src="{{ object.vibe.url }}" type="video/mp4">
+                    Your browser does not support the video element.
+                </video>
+            {% endif %}
         {% endif %}
-
     </div>
 </div>
 {% endblock %}

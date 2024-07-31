@@ -73,10 +73,7 @@ article .container .text-block {
 
 }
 
-.content-section {
-    background:black;
-    border-top: 1px black;
-}
+
 
 .video-container {
     position: relative;
@@ -179,4 +176,19 @@ article .container .text-block {
     min-width: 250px;
     max-height: 800px;
     min-height: 250px;
+}
+
+.dropdown-menu {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+.group:hover .dropdown-menu {
+  display: block;
+  opacity: 1;
+}
+.group:hover .dropdown-menu,
+.dropdown-menu:hover {
+  display: block;
+  opacity: 1;
 }

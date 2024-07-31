@@ -197,6 +197,7 @@ def LikeCommentView(request):  # , id1, id2              id1=post.pk id2=reply.p
 
 """ Home page with all posts """
 
+from sorl.thumbnail import get_thumbnail
 
 class PostListView(ListView):
     model = Post
@@ -205,15 +206,22 @@ class PostListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 5
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(PostListView, self).get_context_data()
+    def get_context_data(self, **kwargs):
+        from django.core.files.storage import default_storage
+        context = super(PostListView, self).get_context_data(**kwargs)
         users = list(User.objects.exclude(pk=self.request.user.pk))
-        if len(users) > 3:
-            cnt = 3
-        else:
-            cnt = len(users)
+        cnt = min(3, len(users))  # Ensures cnt is not greater than the number of users
         random_users = random.sample(users, cnt)
         context['random_users'] = random_users
+        
+        # Add thumbnails for each post
+        for post in context['posts']:
+            if post.image and default_storage.exists(post.image.name):
+                post.thumbnail = get_thumbnail(post.image, '100x100', crop='center', quality=99)
+            else:
+                post.thumbnail = None
+
+        
         return context
 
 

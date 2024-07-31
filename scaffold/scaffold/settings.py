@@ -15,7 +15,7 @@ import django_heroku
 import os
 import secrets
 import dj_database_url
-
+from shutil import which
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 from django.core.wsgi import get_wsgi_application
@@ -39,6 +39,7 @@ SECRET_KEY = os.environ.get(
 )
 
 DEBUG = True
+NPM_BIN_PATH = which('npm')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
@@ -48,7 +49,7 @@ if IS_HEROKU_APP:
 if IS_HEROKU_APP:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -83,22 +84,26 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
+    'sorl.thumbnail',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # ...
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    # ...
+    'allauth.account.middleware.AccountMiddleware',  # Add this line
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
+
 
 ROOT_URLCONF = 'scaffold.urls'
 
@@ -118,6 +123,11 @@ TEMPLATES = [
     },
 ]
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+TAILWIND_APP_NAME = 'theme'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -156,15 +166,10 @@ else:
     # to simplify initial setup. Longer term it's recommended to use Postgres locally too.
     DATABASES = {
         "default": {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'starterkit',
-            'USER': 'postgres',
-            'PASSWORD': '',
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-
 
 
 
@@ -213,13 +218,22 @@ STATICFILES_DIRS = [
 ]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+THUMBNAIL_DEFAULT_STORAGE = 'django.core.files.storage.FileSystemStorage'
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (50, 50), 'crop': True},
+        'cover_art': {'size': (300, 300), 'crop': False},
+    },
+}
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'blog-home'
 LOGIN_URL = 'account_login'
-
+SEPOLIA_INFURA_URL = os.getenv("SEPOLIA_INFURA_URL")
 CKEDITOR_CONFIGS = {
     'default': {
         'width': 'auto',
@@ -277,6 +291,9 @@ SOCIALACCOUNT_PROVIDERS = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+if DEBUG:
+    INFURA_URL="http://localhost:8545"
+else:
+    INFURA_URL= os.getenv("INFURA_URL")
 
 django_heroku.settings(locals())

@@ -5,77 +5,52 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-
-<style>
-.btn-google {
-    color: #545454;
-    background-color: #ffffff;
-    box-shadow: 0 1px 2px 1px #ddd
-}
-
-.or-container {
-    align-items: center;
-    color: #ccc;
-    display: flex;
-    margin: 25px 0
-}
-
-.line-separator {
-    background-color: #ccc;
-    flex-grow: 5;
-    height: 1px
-}
-
-.or-label {
-    flex-grow: 1;
-    margin: 0 15px;
-    text-align: center
-}
-</style>
 <script>
    function onSubmit(token) {
      document.getElementById("login-form").submit();
    }
- </script>
-<div class="m-auto col-md-8">
-<div class="content-section">
+</script>
+
+<div class="max-w-md mx-auto">
+  <div class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4">
     <form action="" method="POST" id="login-form">
-        {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Login</legend>
-            {{form|crispy}}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit" class="g-recaptcha" data-sitekey="6Lcs3u8nAAAAAJqfthu8Gx5KmCqaOorYRXTEnsha" data-callback='onSubmit' >Login</button>
-            <small class="text-muted ml-2">
-                <a href="{% url 'password_reset' %}">Forgot Password?</a>
-            </small>
-        </div>
+      {% csrf_token %}
+      <fieldset>
+        <legend class="text-2xl font-bold mb-6 text-gray-100 border-b border-gray-700 pb-2">Login</legend>
+        {{form|crispy}}
+      </fieldset>
+      <div class="flex items-center justify-between mt-6">
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline g-recaptcha" type="submit" data-sitekey="6Lcs3u8nAAAAAJqfthu8Gx5KmCqaOorYRXTEnsha" data-callback='onSubmit'>
+          Login
+        </button>
+        <a class="inline-block align-baseline font-bold text-sm text-orange-500 hover:text-orange-600" href="{% url 'password_reset' %}">
+          Forgot Password?
+        </a>
+      </div>
     </form>
-    <div class="or-container">
-        <div class="line-separator"></div>
-        <div class="or-label">or</div>
-        <div class="line-separator"></div>
+
+    <div class="my-6 flex items-center">
+      <div class="flex-grow border-t border-gray-700"></div>
+      <span class="flex-shrink mx-4 text-gray-500">or</span>
+      <div class="flex-grow border-t border-gray-700"></div>
     </div>
-    <div class="row">
-        <div class="col-md-12"> 
-            <a class="btn btn-lg btn-google btn-block btn-outline" href="{% provider_login_url 'google' %}">
-                <img src="https://img.icons8.com/color/22/000000/google-logo.png"> Sign In with <b>Google</b>
-            </a> 
-        </div>
-    </div> <br>
-    <div class="row">
-        <div class="col-md-12"> 
-            <a class="btn btn-lg btn-google btn-block btn-outline" href="{% provider_login_url 'github' %}">
-                <img src="https://img.icons8.com/material-sharp/24/000000/github.png"/> Sign In with <b>Github</b>
-            </a> 
-        </div>
-    </div> <br>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            Need an Account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
-        </small>
+
+    <div class="space-y-4">
+      <a class="w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-200 bg-gray-700 hover:bg-gray-600" href="{% provider_login_url 'google' %}">
+        <img class="h-5 w-5 mr-2" src="https://img.icons8.com/color/22/000000/google-logo.png" alt="Google logo">
+        Sign In with <b class="ml-1">Google</b>
+      </a>
+      <a class="w-full flex items-center justify-center px-4 py-2 border border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-200 bg-gray-700 hover:bg-gray-600" href="{% provider_login_url 'github' %}">
+        <img class="h-5 w-5 mr-2" src="https://img.icons8.com/material-sharp/24/000000/github.png" alt="GitHub logo">
+        Sign In with <b class="ml-1">Github</b>
+      </a>
     </div>
-</div>
+
+    <div class="mt-8 text-center">
+      <span class="text-sm text-gray-500">
+        Need an Account? <a class="font-bold text-orange-500 hover:text-orange-600" href="{% url 'register' %}">Sign Up Now</a>
+      </span>
+    </div>
+  </div>
 </div>
 {% endblock %}

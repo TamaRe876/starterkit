@@ -14,8 +14,8 @@ class CommentForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}), label='')
     caption = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Caption'}), label='')
-    link = forms.FileField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter song URL'}
-                                                  ))
+    link = forms.FileField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter song URL'}))
+    image = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'}), label='Image')                              
     vibe = forms.FileField(widget=forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
                                  label='Video')
 
